@@ -1,6 +1,26 @@
 /*jshint browser: true, jquery: true, camelcase: true, indent: 2, undef: true, quotmark: single, maxlen: 80, trailing: true, curly: true, eqeqeq: true, forin: true, immed: true, latedef: true, newcap: true, nonew: true, unused: true, strict: true*/ 
-var letsPlay = function() {
-    'use strict';
+var socket = io(),
+    userName;
+
+function triviaViewModel() {
+
+var self = this;
+
+    self.right = ko.obeservable();
+    self.wrong = ko.observable();
+    self.question = ko.observable();
+    self.answer = ko.observable();
+    self.displayQuestion = ko.observable();
+    self.addingQue = ko.observable();
+    self.addQueDivId = ko.observable();
+    self.user = ko.observable();
+    self.allQuestion = ko.observable();
+    self.scoreBtnId = ko.observable();
+    self.letsPlayDiv = ko.observable();
+    self.onlineUser = ko.observable();
+
+self.letsPlay = function() {
+    
     var url = "question";
     $.ajax({
         method: "GET",
@@ -11,17 +31,17 @@ var letsPlay = function() {
         if (msg.answer === false) {
             msg.answer = "false";
         }
-        $("#allQuestion").show();
-        $("#scoreBtnId").show();
-        $("#addingQue").show();
-        $("#addQueDivId").hide();
-        $("#letsPlayDiv").hide();
-        $('#displayQuestion').show();
-        $('#onlineUser').show();
+        self.allQuestion(true);
+        self.scoreBtnId(true);
+        self.addingQue(true);
+        self.addQueDivId(false);
+        self.letsPlayDiv(false);
+        self.displayQuestion(true);
+        self.onlineUser(true);
     });
 };
-var getScore = function() {
-    'use strict';
+self.getScore = function() {
+    
     $("#scoreDisplayId").show();
     var url = "score";
     $.ajax({
@@ -33,18 +53,17 @@ var getScore = function() {
         if (msg.answer === false) {
             msg.answer = "false";
         }
-        $("#rightId").val(msg.right);
-        $("#wrongId").val(msg.wrong);
+        self.right(msg.right);
+        self.wrong(msg.wrong);
     });
 };
-var postQuestion = function() {
-    'use strict';
+self.postQuestion = function() {
+    
     var url = "question";
-    var question = $("#questionId").val();
-    var answer = $("#answerId").val();
+   
     var data = {
-        "question": question,
-        "answer": answer
+        "question": self.question,
+        "answer": self.answer
     };
     var dataJSON = JSON.stringify(data);
     $.ajax({
@@ -57,26 +76,64 @@ var postQuestion = function() {
         if (msg.answer === false) {
             msg.answer = "false";
         }
-        $("#displayQuestion").show();
-        $("#addingQue").show();
-        $("#addQueDivId").hide();
-        $("#user").hide();
+        self.displayQuestion(true);
+        self.addingQue(true);
+        self.addQueDivId(false);
+        self.user(false);
     });
 };
-var main = function() {
-    'use strict';
-    var socket = io(),
-        userName;
-    $('#divScore').hide();
-    $('#displayQuestion').hide();
-    $('#onlineUser').hide();
-    $("#letsPlay").on('click', function() {
+
+
+ self.addingQueEvent=function(){
+        self.addQueDivId(true);
+        self.displayQuestion(false);
+        self.addingQue(false);
+        self.letsPlay(false);
+        self.user(false);
+        self.answer(null);
+    }
+
+
+self.main = function() {
+   
+   
+    self.divScore = false;
+    self.displayQuestion = false;
+    self.onlineUser = false;
+
+}
+
+    self.letsPlay = function() {
         $('img').hide();
         console.log("Game has started");
-        $('#divScore').show();
-        letsPlay();
-        socket.emit('play', $('#user').val());
+        self.divScore = true;
+        self.userName = self.user;
+        self.currentUserId = self.userName;
+
+        console.log("Current user: " + self.userName);
+        self.letsPlay();
+        socket.emit('play', self.userName);
+    }
+
+    socket.on('newQue', function(question) {
+        self.question = question.question;
+        self.questionAsked = question._id;
+        self.answerAsked = question.answer;
+        $('#' + userName).css("color", "black");
     });
+
+    self.sendBtnEven = function() {
+        socket.emit('score', {
+            questionId: $('#questionAsked').val(),
+            givenAns: $('#answer').val(),
+            actualAns: $('#answerAsked').val()
+        });
+    }
+}
+ko.applybindings(new triviaViewModel());
+
+
+
     socket.on('play', function(name) {
         var item;
         $('#currentUser').val(name);
@@ -84,23 +141,12 @@ var main = function() {
         item = $('<textarea class="ui olive label" id="' + name + '">').text(name);
         $('#onlineUser').append(item);
     });
-    socket.on('newQue', function(question) {
-        $('#question').val(question.question);
-        $('#questionAsked').val(question._id);
-        $('#answerAsked').val(question.answer);
-        $('#' + userName).css("color", "black");
-    });
-    $('#sendBtn').on('click', function() {
-        socket.emit('score', {
-            questionId: $('#questionAsked').val(),
-            givenAns: $('#answer').val(),
-            actualAns: $('#answerAsked').val()
-        });
-    });
-    $('#nextQuestion').on('click', function() {
+    
+    
+    /*('#nextQuestion').on('click', function() {
         $('#answer').val('');
         letsPlay();
-    });
+    });*/
     socket.on('score', function(data) {
         $('#correctAns').val(data.right);
         $('#wrongAns').val(data.wrong);
@@ -115,7 +161,7 @@ var main = function() {
             }
         }
     });
-    $("#addingQue").on('click', function() {
+    /*$("#addingQue").on('click', function() {
         $("#addQueDivId").show();
         $("#displayQuestion").hide();
         $("#addingQue").hide();
@@ -124,6 +170,6 @@ var main = function() {
     });
     $("#submitBtnId").on('click', function() {
         postQuestion();
-    });
+    });*/
 };
 $(document).ready(main);
