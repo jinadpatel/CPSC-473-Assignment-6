@@ -1,0 +1,88 @@
+body {
+			background: #cc6;
+			text-align: center;
+		
+		}
+
+img {
+			margin: 40px 0 0 0;
+			border: 7px solid white;
+			border-radius: 70px;
+		}
+		
+h1 {
+			font-family: 'Londrina Shadow', cursive;
+			text-align: center;
+			font-size: 75px;
+			color: #aaaaff;
+			background: black;
+			margin: 30px 0 0 0;
+		}
+		
+input[type="button"] {
+			background: olive;
+			color: white;
+			border-radius: 12px;
+			font-size: 16px;
+			padding: 10px;
+		}
+
+
+.letsPlayDiv{
+margin: 25px 250px 25px 250px;
+
+
+}
+#correctAns{
+	background-color:lawngreen;
+	
+}
+#wrongAns{
+	background-color:red;
+	
+}
+
+
+#onlineUser{
+	height: 100%;
+	width: 200px;
+	margin-left:0;
+	margin-top: 20px;
+	border-radius: 5px;
+	background-color:black;
+}
+
+#displayQuestion{
+	text-align: center;
+	font-size: 2em;
+	background-color:grey;
+	left: 100px;
+	width: 600px;
+	height: 250px;
+	border-radius: 10px;
+	float:left;
+	margin-left: 150px;
+}
+
+main{
+	height:350px;
+	width:100%;
+}
+
+#addQueDivId{
+	text-align: center;
+	font-size: 2em;
+	background-color:grey;
+	left: 100px;
+	width: 600px;
+	height: 250px;
+	border-radius: 10px;
+	float:left;
+	margin-left: 150px;
+	padding: 30px 30px;
+}
+
+#allQuestion{
+	padding: 30px 30px;
+
+}

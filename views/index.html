@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<title>Welcome To Trivia</title>
+	<link href="semantic/dist/semantic.min.css" rel="stylesheet" type="text/css">
+	<link href="stylesheets/style.css" rel="stylesheet" type="text/css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js">
+	</script>
+	<script src="javascripts/app.js">
+	</script>
+	<script src="/socket.io/socket.io.js">
+	</script>
+	<script type='text/javascript' src='knockout-3.4.1.js'></script>
+	<link href='https://fonts.googleapis.com/css?family=Londrina+Shadow' rel='stylesheet' type='text/css'>
+</head>
+<body>
+	<header>
+		<div class="header">
+			<h1>TRIVIA</h1>
+		</div>
+	</header><img alt="Demo Image" src="http://mybarhop.lookoutcreations.com/sites/default/files/topnews/homer2.png">
+	<main>
+		<div class="container">
+			<div class="ui grid">
+				<div class="four wide column">
+					<div id="onlineUser" data-bind="onlineUser">
+						Users Online:
+						<div>
+							<div id='userList'></div>
+						</div>
+					</div>
+				</div>
+				<div class="twelve wide column">
+					<div id="divScore" data-bind="visible:divScore">
+						<div id="divBtnScore" style="float:right">
+							<div class="ui olive label" id="score" data-bind="score">
+								<h3>Score:</h3>
+								<textarea class="ui label" id="correctAns" data-bind="value:right">Correct Answer</textarea> 
+								<textarea class="ui label" id="wrongAns" data-bind="value:wrong">Wrong Answer</textarea>
+							</div>
+						</div>
+						<div id="addingQueDiv" style="float:right">
+							<input class="ui olive button" id="addingQue" data-bind="visible:addingQue,click:addingQueEvent" name="addButton" style="display:none" type="button" value="Add a question?">
+						</div>
+					</div>
+					<div style="height:5px; width:100%"></div>
+					<div id="letsPlayDiv" data-bind="visible:letsPlayDiv">
+						<div class="field">
+							<input id="user" name="userName" placeholder="Enter your username" type="text" data-bind="visible:user"> 
+							<input class="ui olive button" id="letsPlay" data-bind="letsPlay" name="playButton" type="button" value="Start Round!"><br>
+						</div>
+					</div>
+					<div id="displayQuestion" data-bind="visible:displayQuestion">
+						<input id="questionAsked" type="hidden"> <input id="answerAsked" type="hidden"> <input id="currentUser" type="hidden">
+						<div class="btn" id="allQuestion" data-bind="visible:allQuestion">
+							<div class="ui olive label">
+								Question
+							</div>
+							<textarea class="ui olive label" id="question"></textarea><br>
+							<div class="ui olive label">
+								Answer
+							</div>
+							<textarea class="ui olive label" id="answer"></textarea><br>
+							<input class="ui olive label" id="sendBtn" type="button" value="Submit"> <input class="ui olive label" id="nextQuestion" data-bind="value:playGame" type="button" value="Next"><br>
+						</div>
+					</div>
+					<div id="addQueDivId" style="display : none">
+						<div class="ui olive label">
+							Type a question
+						</div>
+						<textarea class="ui olive label" id="questionId" data-bind="value:question"></textarea><br>
+						<div class="ui olive label">
+							Answer
+						</div>
+						<textarea class="ui olive label" id="answerId" data-bind="value:answr"></textarea><br>
+						<input class="ui olive button" id="submitBtnId" data-bind="click:postQuestion" type="button" value="Submit"><br>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+<script src="https://ajax.aspnetcdn.com/ajax/knockout/knockout-3.1.0.js"></script>
+</body>
+</html>
